@@ -33,7 +33,7 @@ def check_and_stat_savepath(
         kind: Union[Literal["xbox"], Literal["steam"]],
         path: Path) -> SaveFile:
     """
-    Makes sure the savefile exists and gets the savefile's modified time so we can return a SaveFile dict.
+    Makes sure the savefile exists and stats the savefile's modified time so we can return a SaveFile dict.
 
     :param kind:
     :param path:
@@ -42,12 +42,11 @@ def check_and_stat_savepath(
     pass
 
 
-def decide_save_to_keep(savefiles: Tuple[SaveFile]) -> FileTransfer:
+def decide_save_to_keep(savefiles: Tuple[SaveFile, SaveFile]) -> FileTransfer:
     """
     Compares the save files and decides which file is newer and should be transferred to overwrite the old file.
 
-    :param xbox_mtime:
-    :param steam_mtime:
+    :param savefiles:
     :return:
     """
     pass
