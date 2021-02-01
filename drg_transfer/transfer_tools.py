@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from typing import Union, Literal, NamedTuple, TypedDict
+from typing import Union, Literal, Tuple, NamedTuple, TypedDict
 
 
 # Types
@@ -8,10 +8,10 @@ class SaveFilePaths(NamedTuple):
     xbox: Path
     steam: Path
 
-
 class SaveFile(TypedDict):
     kind: Union[Literal["xbox"], Literal["steam"]]
     path: Path
+    mtime: None
 
 
 class FileTransfer(NamedTuple):
@@ -29,7 +29,20 @@ def get_env_paths() -> SaveFilePaths:
     pass
 
 
-def decide_save_to_keep(xbox_mtime, steam_mtime) -> FileTransfer:
+def check_and_stat_savepath(
+        kind: Union[Literal["xbox"], Literal["steam"]],
+        path: Path) -> SaveFile:
+    """
+    Makes sure the savefile exists and gets the savefile's modified time so we can return a SaveFile dict.
+
+    :param kind:
+    :param path:
+    :return:
+    """
+    pass
+
+
+def decide_save_to_keep(savefiles: Tuple[SaveFile]) -> FileTransfer:
     """
     Compares the save files and decides which file is newer and should be transferred to overwrite the old file.
 
