@@ -8,10 +8,15 @@ This tool allows you to transfer save files for [Deep Rock Galactic](https://sto
 between the Steam edition of the game, and the Xbox Games Pass edition.
 
 ## Usage
-1. Copy .env.example to a new .env file, and set the paths to your corresponding copies of the game installed on your
+1. Copy settings.ini.example to a new settings.ini file, and set the paths to your corresponding copies of the game installed on your
 computer. You should just have to change the path to the home folder for your Windows user,
 but if you have the game installed on a different drive, it might be somewhere else.
 
 2. ???
 
 3. Profit
+
+## Differences to JS version
+* Savefile paths and the dry-run setting is stored in settings.ini. 
+A NodeJS-style .env file could be used here as well, but support for that is in the dotenv library,
+and we are avoiding external pip packages for ease of development.
