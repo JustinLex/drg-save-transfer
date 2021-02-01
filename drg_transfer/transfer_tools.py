@@ -1,10 +1,11 @@
 from pathlib import Path
+import configparser
 
 from typing import Union, Literal, Tuple, NamedTuple, TypedDict
 
 
 # Types
-class SaveFilePaths(NamedTuple):
+class SaveFilePaths(TypedDict):
     xbox: Path
     steam: Path
 
@@ -21,9 +22,21 @@ class FileTransfer(NamedTuple):
 
 
 # Functions
-def get_env_paths() -> SaveFilePaths:
-    """Gets path objects for the save file paths given in the environment variables."""
-    pass
+@property
+def dry_run() -> bool:
+    """Gets the value for the dry_run setting in settings.ini."""
+    config = configparser.ConfigParser()
+    config.read('settings.ini')
+    return config.getboolean('cli_settings', 'dry_run')
+
+
+def get_paths() -> SaveFilePaths:
+    """Gets path objects for the save file paths given in settings.ini."""
+    config = configparser.ConfigParser()
+    config.read('settings.ini')
+    xbox_path = Path(config['paths']['xbox_path'])
+    steam_path = Path(config['paths']['steam_path'])
+    return {'xbox': xbox_path, 'steam': steam_path}
 
 
 def check_and_stat_savepath(

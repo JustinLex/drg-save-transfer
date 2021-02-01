@@ -1,7 +1,9 @@
 # Set paths to your savefiles here. Set dry_run to false when you're ready to copy your save over.
 # Actually a TOML file, not an INI file ;)
 
+[paths]
 xbox_path   = "C:/Users/username/AppData/Local/Packages/CoffeeStainStudios.DeepRockGalactic_12331231/SystemAppData/wgs/45311212331_12312312212221/AGEKJEDLASJSAD1123091/001203312923094421312"
 steam_path  = "D:/Games/SteamLibrary/steamapps/common/Deep Rock Galactic/FSD/Saved/SaveGames/1231231213123123_Player.sav"
 
+[cli_settings]
 dry_run     = true
