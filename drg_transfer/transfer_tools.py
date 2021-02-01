@@ -31,11 +31,16 @@ def dry_run() -> bool:
 
 
 def get_paths() -> SaveFilePaths:
-    """Gets path objects for the save file paths given in settings.ini."""
+    """Gets Path objects for the save file paths given in settings.ini."""
     config = configparser.ConfigParser()
     config.read('settings.ini')
-    xbox_path = Path(config['paths']['xbox_path'])
-    steam_path = Path(config['paths']['steam_path'])
+
+    xbox_path_string: str = config['paths']['xbox_path']
+    steam_path_string: str = config['paths']['steam_path']
+
+    xbox_path = Path(xbox_path_string)
+    steam_path = Path(steam_path_string)
+
     return {'xbox': xbox_path, 'steam': steam_path}
 
 
