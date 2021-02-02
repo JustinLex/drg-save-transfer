@@ -27,7 +27,7 @@ try:
     steam_save = transfer_tools.check_and_stat_savepath(kind="steam", path=paths['steam'])
 except transfer_tools.SavefileNotFoundError as err:
     print(f'ERROR: Could not find the {err.kind} savefile at {err.filename}!')
-    raise
+    quit()
 
 # Print file info
 print(
