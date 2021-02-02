@@ -14,6 +14,16 @@ xbox_save = transfer_tools.check_and_stat_savepath(kind="xbox", path=paths['xbox
 steam_save = transfer_tools.check_and_stat_savepath(kind="steam", path=paths['steam'])
 
 # Print file info
+print(
+    f'''Save files found.
+Xbox Games Pass save location and modified time:
+{str(xbox_save['path'])}
+{str(xbox_save['mtime'])}
+Steam save location and modified time:
+{str(steam_save['path'])}
+{str(steam_save['mtime'])}
+'''
+)
 
 proposed_transfer = transfer_tools.decide_save_to_keep((xbox_save, steam_save))
 
@@ -21,7 +31,7 @@ proposed_transfer = transfer_tools.decide_save_to_keep((xbox_save, steam_save))
 
 # Bail if dry run
 if transfer_tools.dry_run:
-    print("Running in DRY RUN MODE, quitting.")
+    print("Running in DRY RUN MODE, files will not be modified. Quitting.")
     quit()
 
 # Prompt user for yes or no
