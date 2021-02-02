@@ -9,6 +9,18 @@ from .drg_transfer import transfer_tools
 # Read paths from settings.ini
 paths = transfer_tools.get_paths()
 
+# See if the Xbox savename has been randomized, and use the new savename.
+xb_path = paths['xbox']
+try:
+    new_xb_path = transfer_tools.handle_random_xbox_filename(xb_path)
+    if not new_xb_path.samefile(xb_path):
+        print(f"Your Xbox Games Pass save file seems to have been renamed from {xb_path.name} to {new_xb_path.name}.")
+        print(f"Using {new_xb_path} as your Xbox Games Pass save file.")
+except transfer_tools.XboxRandomSavefileNotFoundError:
+    print("ERROR: Could not find the Xbox Games Pass savefile, and there is no other save file in the directory!")
+    print(f"The directory {xb_path.parent} does not seem to contain an active save file!")
+    quit()
+
 # Check that savefiles exist and stat their mtimes
 try:
     xbox_save = transfer_tools.check_and_stat_savepath(kind="xbox", path=paths['xbox'])

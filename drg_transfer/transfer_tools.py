@@ -46,6 +46,9 @@ class FileTransfer(NamedTuple):
     overwrite: SaveFile
 
 
+class XboxRandomSavefileNotFoundError(Exception):
+    """Error for we cannot determine the randomized filename for an XboxGamesPass filename."""
+
 class SavefileNotFoundError(Exception):
     """
     Error for when a savefile is not found.
@@ -86,6 +89,27 @@ def get_paths() -> SaveFilePaths:
     steam_path = Path(steam_path_string)
 
     return {'xbox': xbox_path, 'steam': steam_path}
+
+
+def handle_random_xbox_filename(suspected_path: Path) -> Path:
+    """
+    Finds an xbox games pass save in the folder of the given path if the savefile name has been randomized.
+
+    Xbox Games Pass' savefile API randomizes the name of the savefile every time it is saved (Thanks, Microsoft),
+    so if the given savefile is not found, this function searches the directory for another savefile, and returns a
+    Path object pointing to it.
+
+    :raises XboxRandomSavefileNotFoundError: If a savefile could not be found.
+    """
+    if suspected_path.exists():
+        return suspected_path
+
+    for file in suspected_path.parent.iterdir():
+        # We ignore any files that have special characters, as XGP seems to only create numeric names for its savefiles
+        if '-' not in file.name and '.' not in file.name:
+            return file
+
+    raise XboxRandomSavefileNotFoundError()
 
 
 def check_and_stat_savepath(
