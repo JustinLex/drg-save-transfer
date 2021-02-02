@@ -17,11 +17,27 @@ class SaveFilePaths(TypedDict):
     steam: Path
 
 
-class SaveFile(TypedDict):
-    """Dict describing a savefile."""
+class SaveFile():
+    """
+    Class describing a savefile.
+
+    Rich comparison for this class compares the mtimes, newest file > oldest file
+    """
     kind: xb_or_steam
     path: Path
     mtime: datetime
+
+    def __init__(self, kind: xb_or_steam, path: Path, mtime: datetime):
+        super().__init__()
+        self.kind = kind
+        self.path = path
+        self.mtime = mtime
+
+    def __lt__(self, other):
+        return self.mtime < other.mtime
+
+    def __eq__(self, other):
+        return self.mtime == other.mtime
 
 
 class FileTransfer(NamedTuple):
@@ -90,7 +106,9 @@ def check_and_stat_savepath(
 
 def decide_save_to_keep(savefiles: Tuple[SaveFile, SaveFile]) -> FileTransfer:
     """Compares the save files and decides which file is newer and should be transferred to overwrite the old file."""
-    pass
+    keep = max(savefiles)
+    overwrite = min(savefiles)
+    return FileTransfer(keep=keep, overwrite=overwrite)
 
 
 def backup_save(save_file: SaveFile) -> None:

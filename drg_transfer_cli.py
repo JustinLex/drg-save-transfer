@@ -22,11 +22,11 @@ except SavefileNotFoundError as err:
 print(
     f'''Save files found.
 Xbox Games Pass save location and modified time:
-{str(xbox_save['path'])}
-{str(xbox_save['mtime'])}
+{str(xbox_save.path)}
+{str(xbox_save.mtime)}
 Steam save location and modified time:
-{str(steam_save['path'])}
-{str(steam_save['mtime'])}
+{str(steam_save.path)}
+{str(steam_save.mtime)}
 '''
 )
 
