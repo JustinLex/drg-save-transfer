@@ -61,6 +61,10 @@ class SavefileNotFoundError(Exception):
         self.kind = kind
 
 
+class SavefilesAreIdenticalError(Exception):
+    """Error for when we suspect two savefiles are identical."""
+
+
 # Functions
 @property
 def dry_run() -> bool:
@@ -105,7 +109,12 @@ def check_and_stat_savepath(
 
 
 def decide_save_to_keep(savefiles: Tuple[SaveFile, SaveFile]) -> FileTransfer:
-    """Compares the save files and decides which file is newer and should be transferred to overwrite the old file."""
+    """
+    Compares the save files and decides which file is newer and should be transferred to overwrite the old file.
+
+    """
+    if savefiles[0] == savefiles[1]:
+        raise SavefilesAreIdenticalError()
     keep = max(savefiles)
     overwrite = min(savefiles)
     return FileTransfer(keep=keep, overwrite=overwrite)
