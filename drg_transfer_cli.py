@@ -15,7 +15,7 @@ try:
     xbox_save = transfer_tools.check_and_stat_savepath(kind="xbox", path=paths['xbox'])
     steam_save = transfer_tools.check_and_stat_savepath(kind="steam", path=paths['steam'])
 except SavefileNotFoundError as err:
-    print(f'ERROR: Could not find the {err.kind} savefile at {err.filename}')
+    print(f'ERROR: Could not find the {err.kind} savefile at {err.filename}!')
     raise
 
 # Print file info
@@ -33,6 +33,10 @@ Steam save location and modified time:
 proposed_transfer = transfer_tools.decide_save_to_keep((xbox_save, steam_save))
 
 # tell user about proposed transfer
+kind_to_keep = proposed_transfer.keep.kind
+kind_to_overwrite = proposed_transfer.overwrite.kind
+print(f"Your {kind_to_keep} save file is newer and will be transferred to {kind_to_overwrite}.")
+print(f"Your save file on {kind_to_overwrite} will be replaced by this operation.")
 
 # Bail if dry run
 if transfer_tools.dry_run:
@@ -40,8 +44,14 @@ if transfer_tools.dry_run:
     quit()
 
 # Prompt user for yes or no
+response = input("Do you want to copy this savefile? (y/N)")
+if response.lower() != 'y':
+    print("Save transfer cancelled.")
+    quit()
 
-transfer_tools.backup_save(None)
+# Backup save to be overwritten and make transfer
+transfer_tools.backup_save(proposed_transfer.overwrite)
 transfer_tools.transfer_save(proposed_transfer)
 
 # Mission accomplished
+print("Your save file has been successfully transferred! Happy mining!")
