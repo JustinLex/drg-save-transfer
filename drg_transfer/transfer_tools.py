@@ -102,7 +102,7 @@ def check_and_stat_savepath(
         # Package what kind of save file we were expecting so that the UI can tell the user which file was missing
         raise SavefileNotFoundError(enoent=err, kind=kind)
 
-    # Does Windows' mtime give UTC timestamps?? Printing this time to the user might be wildly inaccurate.
+    # FIXME: Does Windows' mtime give UTC timestamps?? Printing this time to the user might be wildly inaccurate.
     mtime = datetime.fromtimestamp(mtime_seconds)
 
     return SaveFile(kind=kind, path=path, mtime=mtime)
@@ -112,6 +112,7 @@ def decide_save_to_keep(savefiles: Tuple[SaveFile, SaveFile]) -> FileTransfer:
     """
     Compares the save files and decides which file is newer and should be transferred to overwrite the old file.
 
+    :raises SavefilesAreIdenticalError: If the two savefiles have the same mtime.
     """
     if savefiles[0] == savefiles[1]:
         raise SavefilesAreIdenticalError()

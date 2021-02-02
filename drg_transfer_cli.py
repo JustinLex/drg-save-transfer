@@ -58,4 +58,4 @@ transfer_tools.backup_save(proposed_transfer.overwrite)
 transfer_tools.transfer_save(proposed_transfer)
 
 # Mission accomplished
-print("Your save file has been successfully transferred! Happy mining!")
+print("Your Deep Rock Galactic save file has been successfully transferred! Happy mining!")
