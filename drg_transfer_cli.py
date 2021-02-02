@@ -1,3 +1,4 @@
+from drg_transfer.transfer_tools import SavefileNotFoundError
 from .drg_transfer import transfer_tools
 # import argparse
 #
@@ -10,8 +11,12 @@ from .drg_transfer import transfer_tools
 paths = transfer_tools.get_paths()
 
 # Check that savefiles exist and stat their mtimes
-xbox_save = transfer_tools.check_and_stat_savepath(kind="xbox", path=paths['xbox'])
-steam_save = transfer_tools.check_and_stat_savepath(kind="steam", path=paths['steam'])
+try:
+    xbox_save = transfer_tools.check_and_stat_savepath(kind="xbox", path=paths['xbox'])
+    steam_save = transfer_tools.check_and_stat_savepath(kind="steam", path=paths['steam'])
+except SavefileNotFoundError as err:
+    print(f'ERROR: Could not find the {err.kind} savefile at {err.filename}')
+    raise
 
 # Print file info
 print(

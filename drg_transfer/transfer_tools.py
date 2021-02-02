@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 import configparser
 
@@ -5,20 +6,43 @@ from typing import Union, Literal, Tuple, NamedTuple, TypedDict
 
 
 # Types
+
+# type alias for either the string literal "steam" or "xbox", bit of a magic string
+xb_or_steam = Union[Literal["xbox"], Literal["steam"]]
+
+
 class SaveFilePaths(TypedDict):
+    """Dict with both the xbox and steam paths."""
     xbox: Path
     steam: Path
 
 
 class SaveFile(TypedDict):
-    kind: Union[Literal["xbox"], Literal["steam"]]
+    """Dict describing a savefile."""
+    kind: xb_or_steam
     path: Path
-    mtime: None
+    mtime: datetime
 
 
 class FileTransfer(NamedTuple):
+    """Dict describing a proposed file transfer operation, transferring from the keep path to the overwrite path."""
     keep: SaveFile
     overwrite: SaveFile
+
+
+class SavefileNotFoundError(Exception):
+    """
+    Error for when a savefile is not found.
+
+    This error describes if the file is meant to be an xbox or steam savefile,
+    and the path where the savefile was expected.
+    """
+    filename: str
+    kind: xb_or_steam
+
+    def __init__(self, enoent: FileNotFoundError, kind: xb_or_steam):
+        self.filename = enoent.filename
+        self.kind = kind
 
 
 # Functions
@@ -45,10 +69,23 @@ def get_paths() -> SaveFilePaths:
 
 
 def check_and_stat_savepath(
-        kind: Union[Literal["xbox"], Literal["steam"]],
+        kind: xb_or_steam,
         path: Path) -> SaveFile:
-    """Makes sure the savefile exists and stats the savefile's modified time so we can return a SaveFile dict."""
-    pass
+    """
+    Makes sure the savefile exists and stats the savefile's modified time so we can return a SaveFile dict.
+
+    :raises SavefileNotFoundError: If savefile does not exist
+    """
+    try:
+        mtime_seconds = path.stat().st_mtime
+    except FileNotFoundError as err:
+        # Package what kind of save file we were expecting so that the UI can tell the user which file was missing
+        raise SavefileNotFoundError(enoent=err, kind=kind)
+
+    # Does Windows' mtime give UTC timestamps?? Printing this time to the user might be wildly inaccurate.
+    mtime = datetime.fromtimestamp(mtime_seconds)
+
+    return SaveFile(kind=kind, path=path, mtime=mtime)
 
 
 def decide_save_to_keep(savefiles: Tuple[SaveFile, SaveFile]) -> FileTransfer:
