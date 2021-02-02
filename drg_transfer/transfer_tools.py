@@ -17,18 +17,17 @@ class SaveFilePaths(TypedDict):
     steam: Path
 
 
-class SaveFile():
+class SaveFile:
     """
     Class describing a savefile.
 
     Rich comparison for this class compares the mtimes, newest file > oldest file
     """
-    kind: xb_or_steam
-    path: Path
-    mtime: datetime
 
-    def __init__(self, kind: xb_or_steam, path: Path, mtime: datetime):
-        super().__init__()
+    def __init__(self,
+                 kind: xb_or_steam,
+                 path: Path,
+                 mtime: datetime):
         self.kind = kind
         self.path = path
         self.mtime = mtime
