@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 import configparser
+import shutil
 
 from typing import Union, Literal, Tuple, NamedTuple, TypedDict
 
@@ -112,9 +113,14 @@ def decide_save_to_keep(savefiles: Tuple[SaveFile, SaveFile]) -> FileTransfer:
 
 def backup_save(save_file: SaveFile) -> None:
     """Makes a copy of the save file, appending the current date and time to its name."""
-    pass
+    old_path = save_file.path
+    new_save_name = old_path.name + "-backup-" + str(datetime.now())
+    save_file.path.rename(old_path.with_name(new_save_name))
 
 
 def transfer_save(proposed_transfer: FileTransfer) -> None:
     """Transfers the save file over, overwriting the existing file there."""
-    pass
+    shutil.copy2(
+        src=str(proposed_transfer.keep.path),
+        dst=str(proposed_transfer.overwrite.path)
+    )
