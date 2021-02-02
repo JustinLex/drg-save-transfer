@@ -12,11 +12,19 @@ between the Steam edition of the game, and the Xbox Games Pass edition.
 computer. You should just have to change the path to the home folder for your Windows user,
 but if you have the game installed on a different drive, it might be somewhere else.
 
-2. ???
+2. Open the directory with this program in cmd.exe or Powershell. 
 
-3. Profit
+3. Test the program by running `python drg_transfer_cli.py` with dry_run set to true (requires Python 3.8+)
+
+4. Set dry_run in settings.ini to false and run `python drg_transfer_cli.py` again to transfer your savefiles
+
+5. ???
+
+6. Profit
 
 ## Differences to JS version
 * Savefile paths and the dry-run setting is stored in settings.ini. 
 A NodeJS-style .env file could be used here as well, but support for that is in the dotenv library,
 and we are avoiding external pip packages for ease of development.
+
+* Console output is not colored for the same reasons, as it is done with an external pip package.
