@@ -1,5 +1,4 @@
 from .drg_transfer import transfer_tools
-from drg_transfer.transfer_tools import SavefileNotFoundError, SavefilesAreIdenticalError
 # import argparse
 #
 # parser = argparse.ArgumentParser(
@@ -14,7 +13,7 @@ paths = transfer_tools.get_paths()
 try:
     xbox_save = transfer_tools.check_and_stat_savepath(kind="xbox", path=paths['xbox'])
     steam_save = transfer_tools.check_and_stat_savepath(kind="steam", path=paths['steam'])
-except SavefileNotFoundError as err:
+except transfer_tools.SavefileNotFoundError as err:
     print(f'ERROR: Could not find the {err.kind} savefile at {err.filename}!')
     raise
 
@@ -33,7 +32,7 @@ Steam save location and modified time:
 # Figure out which file is newer, and abort if they appear to be identical
 try:
     proposed_transfer = transfer_tools.decide_save_to_keep((xbox_save, steam_save))
-except SavefilesAreIdenticalError:
+except transfer_tools.SavefilesAreIdenticalError:
     print("Both save files appear to be identical. Nothing to transfer, quitting.")
     quit()
 
