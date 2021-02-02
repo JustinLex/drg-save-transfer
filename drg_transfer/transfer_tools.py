@@ -49,6 +49,7 @@ class FileTransfer(NamedTuple):
 class XboxRandomSavefileNotFoundError(Exception):
     """Error for we cannot determine the randomized filename for an XboxGamesPass filename."""
 
+
 class SavefileNotFoundError(Exception):
     """
     Error for when a savefile is not found.
