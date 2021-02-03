@@ -1,4 +1,4 @@
-from .drg_transfer import transfer_tools
+from drg_transfer import transfer_tools
 # import argparse
 #
 # parser = argparse.ArgumentParser(
